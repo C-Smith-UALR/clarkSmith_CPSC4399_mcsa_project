@@ -16,6 +16,7 @@ from django.utils.safestring import mark_safe
 from datetime import datetime
 # from .utils import render_to_pdf
 from .utils import Calendar
+from mcsa import schedulingAlgorithm as schedulerFx
 
 def index(request):
     return render(request, 'mcsa/index.html')
@@ -28,6 +29,8 @@ class CalendarView(generic.ListView):
         context = super().get_context_data(**kwargs)
 
         d=userMonthYear.objects.latest('pk')
+        McsaShift.objects.all().delete()
+        schedulerFx.main(d.userMonth, d.userYear)
         cal=Calendar(d.userYear, d.userMonth)
 
         html_cal = cal.formatmonth(withyear=True)
