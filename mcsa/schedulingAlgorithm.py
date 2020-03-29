@@ -48,27 +48,34 @@ def getWeekendDoc(docs):
             return doc[0]
 
 def getWeekendShifts(month, year, dayOfMonth, doc):
+    lastDay=monthrange(year, month)[1]
+    print(dayOfMonth)
+    print(lastDay)
     shiftList=[]
     saturdayDay=dayOfMonth+1
     sundayDay=dayOfMonth+2
     startTimeFri=datetime(year, month, dayOfMonth, 17, 0)
     endTimeFri=datetime(year, month, dayOfMonth, 23, 59)
-    startTimeSat = datetime(year, month, saturdayDay, 1, 0)
-    endTimeSat = datetime(year, month, saturdayDay, 23, 59)
-    startTimeSun = datetime(year, month, sundayDay, 1, 0)
-    endTimeSun = datetime(year, month, sundayDay, 23, 59)
+
     fridayShift=McsaShift(start_time=startTimeFri, end_time=endTimeFri, title='LRIPC', physicianOnCall=doc)
     shiftList.append(fridayShift)
-    satShift = McsaShift(start_time=startTimeSat, end_time=endTimeSat, title='LRIPC', physicianOnCall=doc)
-    shiftList.append(satShift)
-    sunShift = McsaShift(start_time=startTimeSun, end_time=endTimeSun, title='LRIPC', physicianOnCall=doc)
-    shiftList.append(sunShift)
+    if dayOfMonth != lastDay:
+        startTimeSat = datetime(year, month, saturdayDay, 1, 0)
+        endTimeSat = datetime(year, month, saturdayDay, 23, 59)
+        satShift = McsaShift(start_time=startTimeSat, end_time=endTimeSat, title='LRIPC', physicianOnCall=doc)
+        shiftList.append(satShift)
+        if saturdayDay !=lastDay:
+            startTimeSun = datetime(year, month, sundayDay, 1, 0)
+            endTimeSun = datetime(year, month, sundayDay, 23, 59)
+            sunShift = McsaShift(start_time=startTimeSun, end_time=endTimeSun, title='LRIPC', physicianOnCall=doc)
+            shiftList.append(sunShift)
     return shiftList
 
 def main(month, year):
     docs=getDocList()
     #print(docs)
-    seed(2)
+    randomSeed=randint(0,1000)
+    seed(randomSeed)
     daysInMonth=monthrange(year,month)[1]  #get the number of days in user-selected month
     for day in range(daysInMonth):
         dayOfMonth=day+1
