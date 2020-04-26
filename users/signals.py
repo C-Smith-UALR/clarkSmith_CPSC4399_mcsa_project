@@ -14,25 +14,25 @@ def save_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
-@receiver(post_save, sender=AdtaaUser)
-def send_email_to_root(sender, instance, created, **kwargs):
-    if created:
-        send_mail(
-            'User {} has been created'.format(instance.username),
-            'A new user has been created.  Access requested: {}'.format(instance.returnUserRequested()),
-            'clarklander1983@gmail.com',
-            ['clarklander1983@gmail.com'],
-            fail_silently=False,
-
-        )
-
-@receiver(pre_save, sender=AdtaaUser, dispatch_uid='active')
-def active(sender, instance, **kwargs):
-    if instance.is_active and AdtaaUser.objects.filter(pk=instance.pk, is_active=False).exists():
-        subject = 'Active account'
-        message = '{}, your account is now active.  You may login.'.format(instance.username)
-        # from_email = settings.EMAIL_HOST_USER
-        from_email = 'clarklander1983@gmail.com'
-        to_email = [instance.email]
-        send_mail(subject,message,from_email,to_email,fail_silently=False)
+# @receiver(post_save, sender=AdtaaUser)
+# def send_email_to_root(sender, instance, created, **kwargs):
+#     if created:
+#         send_mail(
+#             'User {} has been created'.format(instance.username),
+#             'A new user has been created.  Access requested: {}'.format(instance.returnUserRequested()),
+#             'clarklander1983@gmail.com',
+#             ['clarklander1983@gmail.com'],
+#             fail_silently=False,
+#
+#         )
+#
+# @receiver(pre_save, sender=AdtaaUser, dispatch_uid='active')
+# def active(sender, instance, **kwargs):
+#     if instance.is_active and AdtaaUser.objects.filter(pk=instance.pk, is_active=False).exists():
+#         subject = 'Active account'
+#         message = '{}, your account is now active.  You may login.'.format(instance.username)
+#         # from_email = settings.EMAIL_HOST_USER
+#         from_email = 'clarklander1983@gmail.com'
+#         to_email = [instance.email]
+#         send_mail(subject,message,from_email,to_email,fail_silently=False)
 
