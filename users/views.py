@@ -14,7 +14,7 @@ def register(request):
         form=AdtaaUserForm(request.POST)
         if form.is_valid():
             user=form.save()
-            user.is_active=False
+            # user.is_active=False
             user.save()
             username=form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
